@@ -21,6 +21,8 @@ export default function ProductCard({
         alt={title}
         width={250}
         height={250}
+        quality={100}
+        loading="lazy"
         style={{ objectFit: "cover" }}
       />
       <p>{title}</p>

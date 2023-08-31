@@ -11,7 +11,7 @@ export const ListContainer = styled("div", {
   padding: 10,
   margin: "0 auto",
   display: "grid",
-  gridTemplateColumns: "1fr 1fr 1fr 1fr",
+  gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
   gap: 10,
   flexWrap: "wrap",
 });
