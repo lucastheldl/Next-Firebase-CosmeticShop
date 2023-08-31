@@ -6,8 +6,10 @@ import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { app } from "@/firebase/config";
 import { Container, ListContainer } from "@/styles/pages/home";
 import ProductCard from "@/components/ProductCard";
+import Header from "@/components/Header";
 
 interface Product {
+  id: string;
   title: string;
   price: number;
   imgUrl: string;
@@ -52,6 +54,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header />
       <Container>
         <ListContainer>
           {products.length > 0 &&
@@ -59,6 +62,7 @@ export default function Home() {
               return (
                 <ProductCard
                   key={i}
+                  id={prod.id}
                   title={prod.title}
                   price={prod.price}
                   imgUrl={prod.imgUrl}

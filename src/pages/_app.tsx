@@ -1,12 +1,10 @@
 import { AuthContext, AuthContextProvider } from "@/context/AuthContext";
-import { globalCss } from "@/styles";
+import { globalStyles } from "@/styles/global";
 import type { AppProps } from "next/app";
-import { useContext } from "react";
 
-globalCss();
+globalStyles();
 
 export default function App({ Component, pageProps }: AppProps) {
-  const user = useContext(AuthContext);
   return (
     <AuthContextProvider>
       <Component {...pageProps} />
