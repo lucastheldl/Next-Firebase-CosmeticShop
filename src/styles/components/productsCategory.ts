@@ -11,7 +11,7 @@ export const Nav = styled("section", {
 });
 
 export const NavLink = styled(Link, {
-  borderTop: `1px solid transparent`,
+  borderTop: `2px solid transparent`,
   "&:hover": {
     borderTop: `2px solid $gray800`,
   },

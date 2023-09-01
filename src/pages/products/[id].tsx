@@ -3,6 +3,13 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import Image from "next/image";
+import {
+  ProdContainer,
+  ProdInfo,
+  ProdWrapper,
+} from "@/styles/pages/products/id";
+
 interface Product {
   title: string;
   price: number;
@@ -39,5 +46,25 @@ export default function ProductPage() {
     getProductData(id);
   }, [db, id]);
 
-  return <div>{product !== null && <div>Product: {product.title}</div>}</div>;
+  return (
+    <ProdContainer>
+      {product && (
+        <ProdWrapper>
+          <div>
+            <Image src={product.imgUrl} alt="" width={600} height={500} />
+          </div>
+          <ProdInfo>
+            <strong>{product.title}</strong>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Asperiores consequatur voluptatum molestias, id, sapiente odio,
+              perspiciatis delectus officiis ab fuga at voluptate totam quasi
+              minima quam voluptatem hic libero saepe!
+            </p>
+            <span>R$ {product.price}</span>
+          </ProdInfo>
+        </ProdWrapper>
+      )}
+    </ProdContainer>
+  );
 }
