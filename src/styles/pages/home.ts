@@ -6,7 +6,7 @@ export const Container = styled("main", {
   margin: "2rem auto 0",
   padding: "0 1.5rem",
 });
-export const ListContainer = styled("div", {
+export const ListContainer = styled("section", {
   width: "100%",
   padding: 10,
   margin: "0 auto",

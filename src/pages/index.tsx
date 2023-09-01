@@ -1,12 +1,11 @@
 import Head from "next/head";
 
-import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { app } from "@/firebase/config";
 import { Container, ListContainer } from "@/styles/pages/home";
 import ProductCard from "@/components/ProductCard";
-import Header from "@/components/Header";
+import ProductsCategory from "@/components/ProductsCategory";
 
 interface Product {
   id: string;
@@ -54,8 +53,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
+
       <Container>
+        <ProductsCategory />
         <ListContainer>
           {products.length > 0 &&
             products.map((prod: Product, i) => {
