@@ -42,7 +42,10 @@ export default function Home({ products }: HomeProps) {
                   key={i}
                   id={prod.id}
                   title={prod.title}
-                  price={prod.price}
+                  price={new Intl.NumberFormat("pt-br", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(prod.price)}
                   imgUrl={prod.imgUrl}
                 />
               );
@@ -55,9 +58,8 @@ export default function Home({ products }: HomeProps) {
 
 export const getStaticProps: GetStaticProps = async () => {
   let result = null;
-  const collectionRef = collection(db, "products");
-
   let products;
+  const collectionRef = collection(db, "products");
 
   try {
     result = await getDocs(collectionRef);

@@ -61,7 +61,12 @@ export default function ProductPage() {
               perspiciatis delectus officiis ab fuga at voluptate totam quasi
               minima quam voluptatem hic libero saepe!
             </p>
-            <span>R$ {product.price}</span>
+            <span>
+              {new Intl.NumberFormat("pt-br", {
+                style: "currency",
+                currency: "BRL",
+              }).format(product.price)}
+            </span>
           </ProdInfo>
         </ProdWrapper>
       )}

@@ -4,7 +4,7 @@ import Image from "next/image";
 interface ProductCardProps {
   id: string;
   title: string;
-  price: number;
+  price: string;
   imgUrl: string;
 }
 
