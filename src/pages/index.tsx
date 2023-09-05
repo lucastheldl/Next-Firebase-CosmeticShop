@@ -1,11 +1,11 @@
 import Head from "next/head";
 
-import { useEffect, useState } from "react";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { app } from "@/firebase/config";
 import { Container, ListContainer } from "@/styles/pages/home";
 import ProductCard from "@/components/ProductCard";
 import ProductsCategory from "@/components/ProductsCategory";
+import { GetStaticProps } from "next";
 
 interface Product {
   id: string;
@@ -13,38 +13,16 @@ interface Product {
   price: number;
   imgUrl: string;
 }
+interface HomeProps {
+  products: {
+    id: string;
+    title: string;
+    price: number;
+    imgUrl: string;
+  }[];
+}
 const db = getFirestore(app);
-export default function Home() {
-  const [products, setProducts] = useState([]);
-
-  async function fetchProducts(collec: string) {
-    let result = null;
-    let error = null;
-    const collectionRef = collection(db, collec);
-
-    try {
-      result = await getDocs(collectionRef);
-
-      const document: any = [];
-      result.forEach((doc: any) => {
-        document.push({
-          ...doc.data(),
-          id: doc.id,
-        });
-      });
-      setProducts(document);
-      console.log(document);
-
-      //setProducts(result);
-    } catch (e) {
-      error = e;
-    }
-  }
-
-  useEffect(() => {
-    fetchProducts("products");
-  }, []);
-
+export default function Home({ products }: HomeProps) {
   return (
     <>
       <Head>
@@ -57,7 +35,7 @@ export default function Home() {
       <Container>
         <ProductsCategory />
         <ListContainer>
-          {products.length > 0 &&
+          {products &&
             products.map((prod: Product, i) => {
               return (
                 <ProductCard
@@ -74,3 +52,31 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  let result = null;
+  const collectionRef = collection(db, "products");
+
+  let products;
+
+  try {
+    result = await getDocs(collectionRef);
+
+    const document: any = [];
+    result.forEach((doc: any) => {
+      document.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+    products = document;
+  } catch (e) {
+    console.error(e);
+  }
+
+  return {
+    props: {
+      products,
+    },
+  };
+};
