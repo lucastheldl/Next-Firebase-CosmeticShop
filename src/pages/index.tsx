@@ -1,7 +1,7 @@
 import Head from "next/head";
 
-import { collection, getDocs, getFirestore } from "firebase/firestore";
-import { app } from "@/firebase/config";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase/config";
 import { Container, ListContainer } from "@/styles/pages/home";
 import ProductCard from "@/components/ProductCard";
 import ProductsCategory from "@/components/ProductsCategory";
@@ -21,7 +21,7 @@ interface HomeProps {
     imgUrl: string;
   }[];
 }
-const db = getFirestore(app);
+
 export default function Home({ products }: HomeProps) {
   return (
     <>
