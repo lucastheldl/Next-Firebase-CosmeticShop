@@ -5,7 +5,17 @@ export const HeaderContainer = styled("header", {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+
+  position: "fixed",
+  top: 0,
+  width: "100%",
+
+  boxSizing: "border-box",
+
   padding: "1.5rem 2rem",
+
+  boxShadow: "10px 10px 5px back",
+
   backgroundColor: "$gray100",
   ul: {
     display: "flex",

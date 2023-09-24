@@ -1,9 +1,9 @@
 import { styled } from "..";
 
 export const Container = styled("main", {
-  width: "100%",
   maxWidth: 1120,
-  margin: "2rem auto 0",
+  width: "100%",
+  margin: "7rem auto",
   padding: "0 1.5rem",
 });
 export const ListContainer = styled("section", {

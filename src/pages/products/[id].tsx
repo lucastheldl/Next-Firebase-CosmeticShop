@@ -9,6 +9,7 @@ import {
   ProdInfo,
   ProdWrapper,
 } from "@/styles/pages/products/id";
+import Head from "next/head";
 
 interface Product {
   title: string;
@@ -43,33 +44,38 @@ export default function ProductPage() {
         console.log(error);
       }
     }
-    getProductData(id);
+    getProductData(String(id));
   }, [db, id]);
 
   return (
-    <ProdContainer>
-      {product && (
-        <ProdWrapper>
-          <div>
-            <Image src={product.imgUrl} alt="" width={600} height={500} />
-          </div>
-          <ProdInfo>
-            <strong>{product.title}</strong>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Asperiores consequatur voluptatum molestias, id, sapiente odio,
-              perspiciatis delectus officiis ab fuga at voluptate totam quasi
-              minima quam voluptatem hic libero saepe!
-            </p>
-            <span>
-              {new Intl.NumberFormat("pt-br", {
-                style: "currency",
-                currency: "BRL",
-              }).format(product.price)}
-            </span>
-          </ProdInfo>
-        </ProdWrapper>
-      )}
-    </ProdContainer>
+    <>
+      <Head>
+        <title> Name | Product</title>
+      </Head>
+      <ProdContainer>
+        {product && (
+          <ProdWrapper>
+            <div>
+              <Image src={product.imgUrl} alt="" width={600} height={500} />
+            </div>
+            <ProdInfo>
+              <strong>{product.title}</strong>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Asperiores consequatur voluptatum molestias, id, sapiente odio,
+                perspiciatis delectus officiis ab fuga at voluptate totam quasi
+                minima quam voluptatem hic libero saepe!
+              </p>
+              <span>
+                {new Intl.NumberFormat("pt-br", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(product.price)}
+              </span>
+            </ProdInfo>
+          </ProdWrapper>
+        )}
+      </ProdContainer>
+    </>
   );
 }

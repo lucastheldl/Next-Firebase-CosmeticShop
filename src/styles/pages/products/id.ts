@@ -2,7 +2,7 @@ import { styled } from "../../index";
 
 export const ProdContainer = styled("section", {
   maxWidth: 1120,
-  margin: "0 auto",
+  margin: "7rem auto",
 });
 
 export const ProdWrapper = styled("div", {
