@@ -6,6 +6,8 @@ import { Container, ListContainer } from "@/styles/pages/home";
 import ProductCard from "@/components/ProductCard";
 import ProductsCategory from "@/components/ProductsCategory";
 import { GetStaticProps } from "next";
+import { stripe } from "@/lib/stripe";
+import Stripe from "stripe";
 
 interface Product {
   id: string;
@@ -42,10 +44,7 @@ export default function Home({ products }: HomeProps) {
                   key={i}
                   id={prod.id}
                   title={prod.title}
-                  price={new Intl.NumberFormat("pt-br", {
-                    style: "currency",
-                    currency: "BRL",
-                  }).format(prod.price)}
+                  price={String(prod.price)}
                   imgUrl={prod.imgUrl}
                 />
               );
@@ -57,28 +56,28 @@ export default function Home({ products }: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  let result = null;
-  let products;
-  const collectionRef = collection(db, "products");
+  const res = await stripe.products.list({
+    expand: ["data.default_price"],
+  });
 
-  try {
-    result = await getDocs(collectionRef);
+  const products = res.data.map((product) => {
+    const price = product.default_price as Stripe.Price;
 
-    const document: any = [];
-    result.forEach((doc: any) => {
-      document.push({
-        ...doc.data(),
-        id: doc.id,
-      });
-    });
-    products = document;
-  } catch (e) {
-    console.error(e);
-  }
+    return {
+      id: product.id,
+      title: product.name,
+      imgUrl: product.images[0],
+      price: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(price.unit_amount! / 100),
+    };
+  });
 
   return {
     props: {
       products,
     },
+    revalidate: 60 * 60 * 2,
   };
 };

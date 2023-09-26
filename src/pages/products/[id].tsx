@@ -1,8 +1,4 @@
-import { app } from "@/firebase/config";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-
 import Image from "next/image";
 import {
   ProdContainer,
@@ -10,43 +6,23 @@ import {
   ProdWrapper,
 } from "@/styles/pages/products/id";
 import Head from "next/head";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { stripe } from "@/lib/stripe";
+import Stripe from "stripe";
 
 interface Product {
-  title: string;
-  price: number;
-  imgUrl: string;
+  product: {
+    name: string;
+    price: number;
+    imgUrl: string;
+    description: string;
+    priceInNumber: number;
+    defaultPriceId: string;
+  };
 }
 
-export default function ProductPage() {
-  const router = useRouter();
-  const id = router.query.id;
-
-  const db = getFirestore(app);
-  const [product, setProduct] = useState<Product | null>(null);
-
-  useEffect(() => {
-    async function getProductData(id: string) {
-      let result = null;
-      let error = null;
-      try {
-        const docRef = doc(db, "products", id);
-        const docSnapshot = await getDoc(docRef);
-        if (docSnapshot.exists()) {
-          const { title, price, imgUrl } = docSnapshot.data();
-          setProduct({
-            title,
-            price,
-            imgUrl,
-          });
-        }
-      } catch (e) {
-        error = e;
-        console.log(error);
-      }
-    }
-    getProductData(String(id));
-  }, [db, id]);
-
+export default function ProductPage({ product }: Product) {
+  console.log(product);
   return (
     <>
       <Head>
@@ -59,19 +35,9 @@ export default function ProductPage() {
               <Image src={product.imgUrl} alt="" width={600} height={500} />
             </div>
             <ProdInfo>
-              <strong>{product.title}</strong>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Asperiores consequatur voluptatum molestias, id, sapiente odio,
-                perspiciatis delectus officiis ab fuga at voluptate totam quasi
-                minima quam voluptatem hic libero saepe!
-              </p>
-              <span>
-                {new Intl.NumberFormat("pt-br", {
-                  style: "currency",
-                  currency: "BRL",
-                }).format(product.price)}
-              </span>
+              <strong>{product.name}</strong>
+              <p>{product.description}</p>
+              <span>{String(product.price)}</span>
             </ProdInfo>
           </ProdWrapper>
         )}
@@ -79,3 +45,39 @@ export default function ProductPage() {
     </>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
+  params,
+}) => {
+  const id = params!.id;
+  const product = await stripe.products.retrieve(id, {
+    expand: ["default_price"],
+  });
+
+  const price = product.default_price as Stripe.Price;
+
+  return {
+    props: {
+      product: {
+        id: product.id,
+        name: product.name,
+        imgUrl: product.images[0],
+        price: new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(price.unit_amount! / 100),
+        priceInNumber: price.unit_amount! / 100,
+        description: product.description,
+        defaultPriceId: price.id,
+      },
+    },
+    revalidate: 60 * 60 * 2,
+  };
+};

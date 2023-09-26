@@ -4,7 +4,9 @@ import SearchBar from "./SearchBar";
 export default function Header() {
   return (
     <HeaderContainer>
-      <h1> Cosmetic spa</h1>
+      <h1>
+        <OptionLink href="/">Cosmetic spa</OptionLink>
+      </h1>
       <SearchBar />
       <ul>
         <li>

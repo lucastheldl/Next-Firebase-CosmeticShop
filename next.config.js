@@ -10,7 +10,7 @@ const nextConfig = {
     APP_ID: process.env.NEXT_PUBLIC_APP_ID,
   },
   images: {
-    domains: ["images.unsplash.com"],
+    domains: ["files.stripe.com"],
   },
 };
 
